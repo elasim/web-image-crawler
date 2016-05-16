@@ -1,0 +1,122 @@
+﻿<Window x:Class="ImageCrawler.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        Title="Web Image Viewer" Height="222" Width="337" ResizeMode="NoResize">
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo></TaskbarItemInfo>
+    </Window.TaskbarItemInfo>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Web Image Crawler" Grid.Row="0"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   FontFamily="Arial" FontSize="24" FontWeight="Bold"/>
+        <StackPanel Grid.Row="1">
+            <ComboBox Margin="10,5,10,5" IsEditable="True" Text="{Binding Filter}">
+                <ComboBoxItem Content="^http\:\/\/cfile([0-9]+)\.uf\.tistory\.com\/(.+)$"/>
+                <ComboBoxItem Content="^http\:\/\/i.imgur\.com\/(.+)$"/>
+            </ComboBox>
+            <Grid Margin="10,0,10,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Text="{Binding Prefix}">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                            <Style.Resources>
+                                <VisualBrush x:Key="CueBannerBrush" AlignmentX="Center" AlignmentY="Center" Stretch="None">
+                                    <VisualBrush.Visual>
+                                        <Label Foreground="Gray">
+                                            Prefix, default value is "Image"
+                                        </Label>
+                                    </VisualBrush.Visual>
+                                </VisualBrush>
+                            </Style.Resources>
+                            <Style.Triggers>
+                                <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                                    <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                                </Trigger>
+                                <Trigger Property="Text" Value="{x:Null}">
+                                    <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                                </Trigger>
+                                <Trigger Property="IsKeyboardFocused" Value="True">
+                                    <Setter Property="Background" Value="{Binding ElementName=Self, Path=Background}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+                <ComboBox Grid.Column="1" Width="80" Margin="5,0,0,0"
+                          IsEditable="True" Text="{Binding Postfix}">
+                    <ComboBoxItem Content="jpg"/>
+                    <ComboBoxItem Content="png"/>
+                    <ComboBoxItem Content="gif"/>
+                </ComboBox>
+            </Grid>
+            <TextBox Margin="10,0,10,5" Text="{Binding TargetURL, UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.Style>
+                    <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                        <Style.Resources>
+                            <VisualBrush x:Key="CueBannerBrush" AlignmentX="Center" AlignmentY="Center" Stretch="None">
+                                <VisualBrush.Visual>
+                                    <Label Content="Put Your Targeting URL" Foreground="Gray" />
+                                </VisualBrush.Visual>
+                            </VisualBrush>
+                        </Style.Resources>
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                            </Trigger>
+                            <Trigger Property="Text" Value="{x:Null}">
+                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter Property="Background" Value="{Binding ElementName=Self, Path=Background}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+        </StackPanel>
+        <Grid Grid.Row="2">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Margin="10" Command="{Binding Gotcha}">
+                    <Button.HorizontalAlignment>Center</Button.HorizontalAlignment>
+                    <Button.VerticalAlignment>Center</Button.VerticalAlignment>
+                    <Button.Content>Gotcha</Button.Content>
+                </Button>
+                <Button Margin="10" Command="{Binding Cancel}">
+                    <Button.HorizontalAlignment>Center</Button.HorizontalAlignment>
+                    <Button.VerticalAlignment>Center</Button.VerticalAlignment>
+                    <Button.Content>Cancel</Button.Content>
+                </Button>
+            </StackPanel>
+        </Grid>
+        <StatusBar Grid.Row="3">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem Grid.Column="0">
+                <TextBlock Text="{Binding Status}" TextAlignment="Left"/>
+            </StatusBarItem>
+            <Separator Grid.Column="1"/>
+            <StatusBarItem Grid.Column="2">
+                <ProgressBar Width="100"  Height="15" Maximum="{Binding NumberOfPage, Mode=OneWay}" Minimum="0.0" Value="{Binding Downloaded, Mode=OneWay}"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>
